@@ -71,6 +71,26 @@ var app = app || {};
 			});
 
 			new Router();
+
+            (function() {
+
+            var proxiedSync = Backbone.sync;
+
+            Backbone.sync = function(method, model, options) {
+                options || (options = {});
+
+                if (!options.crossDomain) {
+                options.crossDomain = true;
+                }
+
+                if (!options.xhrFields) {
+                options.xhrFields = {withCredentials:true};
+                }
+
+                return proxiedSync(method, model, options);
+            };
+            })();
+
 			Backbone.history.start();
 
 			this.props.todos.fetch();
@@ -81,7 +101,8 @@ var app = app || {};
 			// do this manually. however, since saving isn't expensive this is an
 			// elegant way to keep it reactively up-to-date.
 			this.props.todos.forEach(function (todo) {
-				todo.save();
+			    if(!todo.isNew())
+				    todo.save();
 			});
 		},
 

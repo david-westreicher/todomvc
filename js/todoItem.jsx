@@ -55,6 +55,9 @@ var app = app || {};
 		handleChange: function (event) {
 			this.setState({editText: event.target.value});
 		},
+		handleDestroy: function (event) {
+		    this.props.todo.destroy();
+		},
 
 		render: function () {
 			return (
@@ -72,7 +75,7 @@ var app = app || {};
 						<label onDoubleClick={this.handleEdit}>
 							{this.props.todo.get('title')}
 						</label>
-						<button className="destroy" onClick={this.props.onDestroy} />
+						<button className="destroy" onClick={this.handleDestroy} />
 					</div>
 					<input
 						ref="editField"
